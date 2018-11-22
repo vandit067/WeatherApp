@@ -132,7 +132,7 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
     @Override
     public void showData(@NonNull WeatherInfo weatherInfo) {
         hideProgress();
-        this.mTvLastUpdate.setText(String.format(getString(R.string.text_last_update_date), DateFormat.getDateTimeInstance().format(new Date(weatherInfo.getDt() * 1000))));
+        this.mTvLastUpdate.setText(String.format(getString(R.string.text_last_update_date), DateFormat.getDateTimeInstance().format(new Date(System.currentTimeMillis()))));
         this.mTvCity.setText(weatherInfo.getName());
         this.mTvDescription.setText(weatherInfo.getWeather().get(0).getDescription());
         this.mTvTemp.setText(String.format("%s%s", weatherInfo.getMain().getTemp(), getString(R.string.celsius)));
