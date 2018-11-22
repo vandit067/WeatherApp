@@ -4,4 +4,8 @@
     <string name="api_key">b815beff6f983f00159f7a3453f08d0a</string>
     <string name="unit_metric">metric</string>
     <string name="unit_imperial">imperial</string>
+    <string name="text_enter_city">Enter City</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="celsius">°C</string>
 </resources>

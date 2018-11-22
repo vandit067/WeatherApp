@@ -1,17 +1,13 @@
 package com.example.vandit.weatherapp.presenter;
 
 import android.content.Context;
-import android.view.View;
 
 import com.example.vandit.weatherapp.R;
 import com.example.vandit.weatherapp.api.WeatherApiServices;
 import com.example.vandit.weatherapp.contract.WeatherContract;
-import com.example.vandit.weatherapp.model.WeatherInfo;
 import com.example.vandit.weatherapp.utils.rx.AppRxSchedulers;
 
 import androidx.annotation.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class WeatherPresenter extends BasePresenter<WeatherContract.View> implements WeatherContract.Presenter {
 
