@@ -8,4 +8,8 @@
     <string name="humidity">Humidity</string>
     <string name="wind_speed">Wind Speed</string>
     <string name="celsius">°C</string>
+    <string name="text_weather_icon_url">http://openweathermap.org/img/w/%s.png</string>
+    <string name="text_last_update_date">Last update: %s</string>
+    <string name="text_message_no_city_data">No weather data available for city</string>
+    <string name="text_message_enter_city">Please enter city</string>
 </resources>

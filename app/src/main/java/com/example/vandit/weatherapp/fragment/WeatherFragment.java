@@ -19,9 +19,15 @@ import com.example.vandit.weatherapp.R;
 import com.example.vandit.weatherapp.contract.WeatherContract;
 import com.example.vandit.weatherapp.model.WeatherInfo;
 import com.example.vandit.weatherapp.presenter.WeatherPresenter;
+import com.example.vandit.weatherapp.utils.UiUtils;
 import com.example.vandit.weatherapp.utils.rx.AppRxSchedulers;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +37,8 @@ import butterknife.ButterKnife;
 
 public class WeatherFragment extends Fragment implements WeatherContract.View, TextView.OnEditorActionListener, TextWatcher {
 
+    @BindView(R.id.fragment_weather_rl_main_view)
+    RelativeLayout mRlMainView;
     @BindView(R.id.fragment_weather_tiet_city)
     TextInputEditText mEtCity;
     @BindView(R.id.fragment_weather_til_city)
@@ -94,7 +102,7 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if(actionId == EditorInfo.IME_ACTION_SEARCH){
             if(TextUtils.isEmpty(v.getText())){
-                // ToDo: show snackbar
+                UiUtils.showSnackBar(this.mRlContentView, getString(R.string.text_message_enter_city), Snackbar.LENGTH_LONG);
             }
             this.mWeatherPresenter.loadData(v.getText().toString());
             return true;
@@ -116,26 +124,21 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
 
     @Override
     public void showError(@NonNull String message) {
-
+        this.mRlContentView.setVisibility(View.GONE);
+        this.mProgressBar.setVisibility(View.GONE);
+        UiUtils.showSnackBar(this.mRlContentView, getString(R.string.text_message_no_city_data), Snackbar.LENGTH_LONG);
     }
 
     @Override
     public void showData(@NonNull WeatherInfo weatherInfo) {
         hideProgress();
-        String city = weatherInfo.getName();
-        String condition = weatherInfo.getWeather().get(0).getDescription();
-        String temp = weatherInfo.getMain().getTemp() +
-                getString(R.string.celsius);
-        String humidity = getString(R.string.humidity) + ": " +
-                weatherInfo.getMain().getHumidity() + "%";
-        String wind = getString(R.string.wind_speed) + ": " +
-                weatherInfo.getWind().getSpeed() + " m/s";
-
-        this.mTvCity.setText(city);
-        this.mTvDescription.setText(condition);
-        this.mTvTemp.setText(temp);
-        this.mTvHumidity.setText(humidity);
-        this.mTvPressure.setText(wind);
+        this.mTvLastUpdate.setText(String.format(getString(R.string.text_last_update_date), DateFormat.getDateTimeInstance().format(new Date(weatherInfo.getDt() * 1000))));
+        this.mTvCity.setText(weatherInfo.getName());
+        this.mTvDescription.setText(weatherInfo.getWeather().get(0).getDescription());
+        this.mTvTemp.setText(String.format("%s%s", weatherInfo.getMain().getTemp(), getString(R.string.celsius)));
+        this.mTvHumidity.setText(String.format("%s: %s%%", getString(R.string.humidity), weatherInfo.getMain().getHumidity()));
+        this.mTvPressure.setText(String.format("%s: %s m/s", getString(R.string.wind_speed), weatherInfo.getWind().getSpeed()));
+        Picasso.with(this.mContext).load(String.format(getString(R.string.text_weather_icon_url), weatherInfo.getWeather().get(0).getIcon())).into(this.mIvWeatherIcon);
     }
 
     @Override
