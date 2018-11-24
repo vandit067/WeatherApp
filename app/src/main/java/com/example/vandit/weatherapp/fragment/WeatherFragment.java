@@ -67,7 +67,7 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
     private WeatherPresenter mWeatherPresenter;
 
     public static WeatherFragment newInstance() {
-       return new WeatherFragment();
+        return new WeatherFragment();
     }
 
     @Override
@@ -100,10 +100,12 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if(actionId == EditorInfo.IME_ACTION_SEARCH){
-            if(TextUtils.isEmpty(v.getText())){
-                UiUtils.showSnackBar(this.mRlContentView, getString(R.string.text_message_enter_city), Snackbar.LENGTH_LONG);
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (TextUtils.isEmpty(v.getText())) {
+                this.mTilCity.setError(getString(R.string.text_message_enter_city));
+                return false;
             }
+            UiUtils.hideKeyBoard(v);
             this.mWeatherPresenter.loadData(v.getText().toString());
             return true;
         }
@@ -126,7 +128,7 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
     public void showError(@NonNull String message) {
         this.mRlContentView.setVisibility(View.GONE);
         this.mProgressBar.setVisibility(View.GONE);
-        UiUtils.showSnackBar(this.mRlContentView, getString(R.string.text_message_no_city_data), Snackbar.LENGTH_LONG);
+        UiUtils.showSnackBar(this.mRlContentView, message, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -148,14 +150,25 @@ public class WeatherFragment extends Fragment implements WeatherContract.View, T
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(count == 0){
+        if (count == 0) {
             this.mRlContentView.setVisibility(View.GONE);
             this.mProgressBar.setVisibility(View.GONE);
+            return;
         }
+        this.mTilCity.setError("");
+
     }
 
     @Override
     public void afterTextChanged(Editable s) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mWeatherPresenter.onDestroy();
+        this.mWeatherPresenter = null;
 
     }
 }

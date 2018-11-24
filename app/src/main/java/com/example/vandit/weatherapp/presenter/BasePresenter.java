@@ -9,7 +9,7 @@ public abstract class BasePresenter<V> {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public BasePresenter(V view) {
+    BasePresenter(V view) {
         this.view = view;
     }
 
@@ -24,11 +24,11 @@ public abstract class BasePresenter<V> {
      * Contains common cleanup actions needed for all presenters, if any.
      * Subclasses may override this.
      */
-    public void onStop(){
+    public void onDestroy(){
         compositeDisposable.clear();
     }
 
-    protected void addDisposable(Disposable disposable) {
+    void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 }
